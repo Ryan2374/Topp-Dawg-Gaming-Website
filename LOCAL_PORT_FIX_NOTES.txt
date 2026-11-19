@@ -1,0 +1,14 @@
+TOPP DAWG GAMING - LOCAL PORT CONFLICT FIX
+
+Double-click start_local_test.bat in the original website project.
+The website runs only on your PC and opens a local browser window.
+
+If 127.0.0.1:8765 is in use, the server automatically uses the next
+available local port from 8766 through 8785 and shows the exact URL.
+The pricing lab's browser-capture feature follows that selected port.
+
+To stop old test servers, press Ctrl+C in their command windows.
+Do not end unrelated applications just to free 8765.
+
+Site settings, retailer observations, markup logic, catalog and search
+integrations are not replaced by this patch.

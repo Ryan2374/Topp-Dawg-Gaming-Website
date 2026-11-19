@@ -1,0 +1,21 @@
+TOPP DAWG GAMING - BROWSER SHOPPING SEARCH (LOCAL TEST)
+
+Start your website using start_local_test.bat, then open:
+http://127.0.0.1:8765/lab.html
+
+Select a specific component and click Search Shopping Prices Automatically.
+The local server starts a separate temporary Edge/Chrome browsing session,
+checks Bing Shopping and Google Shopping search results, and tries to identify
+listings from Newegg, B&H, Micro Center and Best Buy. It does not need URLs.
+If a listing exposes a USD price and model-family match, the site applies
+20% down to 5% markup based on item cost and labels it SEARCH ESTIMATE.
+It cannot verify current stock, tax, shipping, precise product variants,
+or the price at final checkout. The search engine can block automation.
+A blocked/empty result is NOT replaced with a fictitious sample price.
+Generic case, cooler and concept laptop entries need actual model numbers.
+
+Saved retailer page checks and shopping search observations are separate.
+Existing site-settings.json, build.py, parts-catalog.json and saved prices
+were preserved. Installer backups are in .tdg-update-backups.
+Nothing is published online. Requires Windows 10/11 and Edge or Chrome.
+If your original build.py overwrites pages, apply this update again afterward.

@@ -1,0 +1,20 @@
+TOPP DAWG GAMING - CHROME SHOPPING DOM CAPTURE UPDATE
+
+This update removes DevTools WebSocket debugging entirely. Chrome now captures
+public Google/Bing shopping results using its built-in --headless --dump-dom
+command. The saved page is analyzed offline by Chrome without visiting
+retailer product pages.
+
+NO Python, supplier account, cloud API key, browser extension or Chrome
+remote-debugging port is required. Edge is never launched.
+
+START: double-click start_local_test.bat from the ORIGINAL website folder.
+TEST: Price Lab -> Search Shopping Prices Automatically.
+DIAGNOSE: run DIAGNOSE_SHOPPING.bat if the automated search returns no prices.
+
+IMPORTANT: Google/Bing may return verification pages or no merchant price.
+Every reported price is an unverified search-listing estimate, not live stock.
+The local demo must not treat estimates as confirmed available parts.
+
+The updater backs up replaced files. Project settings and saved retail prices
+are preserved. Nothing is published to the internet.

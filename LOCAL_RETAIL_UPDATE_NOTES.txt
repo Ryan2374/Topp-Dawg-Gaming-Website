@@ -1,0 +1,9 @@
+TOPP DAWG GAMING - AUTOMATIC RETAIL SEARCH UPDATE
+
+Installed into the original website project. No Python required.
+Double-click start_local_test.bat in THIS project folder.
+Open http://127.0.0.1:8765/lab.html to select a part and click Search Retailers Automatically.
+Open http://127.0.0.1:8765/builder.html and click Automatically Price This Build.
+Nothing is published online; some retailers may block automatic requests.
+Original site-settings.json, build.py, and saved retail-lab-offers.json were preserved.
+Running the original build.py can overwrite the updated website pages; rerun this update if needed.

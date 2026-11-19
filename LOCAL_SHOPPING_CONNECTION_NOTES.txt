@@ -1,0 +1,17 @@
+TOPP DAWG GAMING - SHOPPING SEARCH CONNECTION UPDATE
+
+This patch improves the connection between the isolated Edge/Chrome browser
+and the local PowerShell search server. It uses 127.0.0.1, disables proxy use
+for the local debugging WebSocket, and retries startup connections.
+
+If the Price Lab still reports a failure, close the server window, then run
+DIAGNOSE_SHOPPING.bat in your original website folder. It prints separate
+browser, DNS, HTTPS, and browser-automation results.
+
+To start normal testing, double-click start_local_test.bat in the original
+website folder. The existing port conflict fix remains in place.
+
+No retail accounts or paid APIs are needed. This does not overcome CAPTCHA,
+search engine restrictions, blocked internet access or network policies.
+No fabricated prices are supplied. Old settings and observations stay intact.
+Nothing is published online.

@@ -1,0 +1,218 @@
+{
+  "notice": "Illustrative configuration examples and sample component prices only. Not live inventory, not a binding quote. Final compatibility, availability, tax, shipping and total are reviewed by Topp Dawg Gaming.",
+  "assembly": 175,
+  "desktop": {
+    "cpu": [
+      {
+        "id": "r5",
+        "name": "AMD Ryzen 5 9600X",
+        "socket": "AM5"
+      },
+      {
+        "id": "r7",
+        "name": "AMD Ryzen 7 9700X",
+        "socket": "AM5"
+      },
+      {
+        "id": "i5",
+        "name": "Intel Core Ultra 5 245K",
+        "socket": "LGA1851"
+      },
+      {
+        "id": "i7",
+        "name": "Intel Core Ultra 7 265K",
+        "socket": "LGA1851"
+      }
+    ],
+    "motherboard": [
+      {
+        "id": "b650",
+        "name": "B650 Wi-Fi ATX (AM5)",
+        "socket": "AM5",
+        "form": "ATX"
+      },
+      {
+        "id": "x870",
+        "name": "X870 Wi-Fi ATX (AM5)",
+        "socket": "AM5",
+        "form": "ATX"
+      },
+      {
+        "id": "b860",
+        "name": "B860 Wi-Fi ATX (Intel)",
+        "socket": "LGA1851",
+        "form": "ATX"
+      },
+      {
+        "id": "z890",
+        "name": "Z890 Wi-Fi ATX (Intel)",
+        "socket": "LGA1851",
+        "form": "ATX"
+      }
+    ],
+    "gpu": [
+      {
+        "id": "5060",
+        "name": "GeForce RTX 5060 8 GB (example)",
+        "length": 255,
+        "psuMin": 650
+      },
+      {
+        "id": "5070",
+        "name": "GeForce RTX 5070 12 GB (example)",
+        "length": 300,
+        "psuMin": 750
+      },
+      {
+        "id": "9070xt",
+        "name": "Radeon RX 9070 XT 16 GB (example)",
+        "length": 325,
+        "psuMin": 750
+      },
+      {
+        "id": "5080",
+        "name": "GeForce RTX 5080 16 GB (example)",
+        "length": 340,
+        "psuMin": 850
+      }
+    ],
+    "ram": [
+      {
+        "id": "16",
+        "name": "16 GB DDR5 (2 x 8 GB)"
+      },
+      {
+        "id": "32",
+        "name": "32 GB DDR5 (2 x 16 GB)"
+      },
+      {
+        "id": "64",
+        "name": "64 GB DDR5 (2 x 32 GB)"
+      }
+    ],
+    "ssd": [
+      {
+        "id": "1",
+        "name": "1 TB NVMe SSD"
+      },
+      {
+        "id": "2",
+        "name": "2 TB NVMe SSD"
+      },
+      {
+        "id": "4",
+        "name": "4 TB NVMe SSD"
+      }
+    ],
+    "cooler": [
+      {
+        "id": "air",
+        "name": "Performance tower air cooler"
+      },
+      {
+        "id": "aio",
+        "name": "240 mm liquid cooler"
+      }
+    ],
+    "case": [
+      {
+        "id": "airflow",
+        "name": "Airflow mid-tower (GPU up to 360 mm)",
+        "maxGpu": 360,
+        "form": [
+          "ATX"
+        ]
+      },
+      {
+        "id": "compact",
+        "name": "Compact mid-tower (GPU up to 305 mm)",
+        "maxGpu": 305,
+        "form": [
+          "ATX"
+        ]
+      },
+      {
+        "id": "showcase",
+        "name": "Panoramic showcase (GPU up to 400 mm)",
+        "maxGpu": 400,
+        "form": [
+          "ATX"
+        ]
+      }
+    ],
+    "psu": [
+      {
+        "id": "650",
+        "name": "650W 80+ Gold modular PSU",
+        "watts": 650
+      },
+      {
+        "id": "750",
+        "name": "750W 80+ Gold modular PSU",
+        "watts": 750
+      },
+      {
+        "id": "850",
+        "name": "850W 80+ Gold modular PSU",
+        "watts": 850
+      },
+      {
+        "id": "1000",
+        "name": "1000W 80+ Gold modular PSU",
+        "watts": 1000
+      }
+    ]
+  },
+  "laptop": {
+    "platform": [
+      {
+        "id": "portable15",
+        "name": "15-inch performance laptop concept",
+        "details": "FHD high-refresh panel / example integrated CPU + laptop GPU platform; exact chassis and parts depend on supplier."
+      },
+      {
+        "id": "creator16",
+        "name": "16-inch high-resolution laptop concept",
+        "details": "QHD high-refresh panel / example premium integrated CPU + laptop GPU platform; exact chassis and parts depend on supplier."
+      }
+    ],
+    "ram": [
+      {
+        "id": "16",
+        "name": "16 GB compatible RAM (subject to model)"
+      },
+      {
+        "id": "32",
+        "name": "32 GB compatible RAM (subject to model)"
+      },
+      {
+        "id": "64",
+        "name": "64 GB compatible RAM (subject to model)"
+      }
+    ],
+    "ssd": [
+      {
+        "id": "1",
+        "name": "1 TB compatible NVMe SSD"
+      },
+      {
+        "id": "2",
+        "name": "2 TB compatible NVMe SSD"
+      },
+      {
+        "id": "4",
+        "name": "4 TB compatible NVMe SSD"
+      }
+    ]
+  },
+  "os": [
+    {
+      "id": "none",
+      "name": "No operating system included"
+    },
+    {
+      "id": "win11",
+      "name": "Windows 11 Home license + setup (example)"
+    }
+  ]
+}
