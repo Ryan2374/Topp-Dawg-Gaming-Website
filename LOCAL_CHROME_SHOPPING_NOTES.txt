@@ -1,9 +1,8 @@
-TOPP DAWG GAMING - CHROME SHOPPING DOM CAPTURE UPDATE
+TOPP DAWG GAMING - CHROME DOM OUTPUT LOCK FIX
 
-This update removes DevTools WebSocket debugging entirely. Chrome now captures
-public Google/Bing shopping results using its built-in --headless --dump-dom
-command. The saved page is analyzed offline by Chrome without visiting
-retailer product pages.
+This update restores Chrome headless DOM capture through redirected output
+files but reads them using FileShare.ReadWrite and retries to avoid file locks.
+No Chrome DevTools WebSocket is used.
 
 NO Python, supplier account, cloud API key, browser extension or Chrome
 remote-debugging port is required. Edge is never launched.

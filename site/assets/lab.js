@@ -39,7 +39,7 @@ async function runRetailSearch(){
  const key=$('part').value,part=catalog[key];if(!part)return;
  $('auto-search').disabled=true;
  $('result').classList.remove('show');const out=$('auto-results');out.replaceChildren();
- status('Opening isolated Google Chrome shopping searches for '+part.name+'… this may take 15–35 seconds. No copied URLs or accounts needed.');
+ status('Searching structured Google Shopping prices for '+part.name+'… no product URLs needed; a free search-data key must be configured once.');
  try{
   const j=await api('/api/shopping',{key});
   let found=0;

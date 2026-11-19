@@ -287,6 +287,17 @@ function Product-Query([string]$key) {
 function Model-Matches([string]$key,[string]$title) {
     if ([string]::IsNullOrWhiteSpace($title)) { return $false }
     $t = $title.ToLowerInvariant()
+    # Search results are not guaranteed to describe a single purchasable component.
+    # Reject common multi-item offers and non-new items before matching a model.
+    # Do not globally reject the word 'kit': a RAM kit can be a valid single SKU.
+    if ($t -match '(?i)\b(bundle|combo|package deal|prebuilt|refurbished|renewed|used|open[ -]?box)\b') { return $false }
+    if ($key.StartsWith('desktop.cpu.')) {
+        # A CPU search must not accept a CPU + motherboard / other-PC-parts kit.
+        if ($t -match '(?i)\b(motherboard|mainboard|mobo|memory kit|graphics card|ram|ssd|gaming desktop|desktop computer|complete system|build kit)\b') { return $false }
+        if ($t -match '(?i)\b(b650|b850|b860|x670|x870|z790|z890|a620)\b') { return $false }
+        if ($t -match '(?i)\s+[&+]\s+') { return $false }
+        if ($t -match '(?i)\bkit\b') { return $false }
+    }
     # Hard filters for model family, not exact manufacturer's part number.
     if ($key -match '^desktop\.cpu\.r5$') { return ($t -match '\bryzen\s*5\s*9600x\b') }
     if ($key -match '^desktop\.cpu\.r7$') { return ($t -match '\bryzen\s*7\s*9700x\b') }
@@ -443,7 +454,15 @@ function Read-ShoppingObservations {
     if (-not (Test-Path -LiteralPath $shoppingFile -PathType Leaf)) { return }
     try {
         $rows = Get-Content -LiteralPath $shoppingFile -Raw -Encoding UTF8 | ConvertFrom-Json
-        foreach ($item in @($rows)) { if ($null -ne $item) { Write-Output $item } }
+        foreach ($item in @($rows)) {
+            if ($null -eq $item) { continue }
+            $itemKey = [string]$item.key
+            # Revalidate previously saved search observations as matching rules
+            # improve. Never serve a saved CPU+motherboard bundle as a CPU price.
+            if (-not $parts.ContainsKey($itemKey)) { continue }
+            if (-not (Model-Matches $itemKey ([string]$item.title))) { continue }
+            Write-Output $item
+        }
     } catch { return }
 }
 function Write-ShoppingObservations($rows) {
@@ -503,7 +522,7 @@ function Search-Shopping([string]$key) {
     foreach ($vendor in @('Newegg','B&H Photo','Micro Center','Best Buy')) {
         $found=@($selected | Where-Object { $_.vendor -eq $vendor } | Sort-Object -Property { [decimal]$_.price })
         if ($found.Count -eq 0) {
-            $output.Add(@{vendor=$vendor;status='not_found';message='No readable, model-matching search listing. Price and stock unknown.'})
+            $output.Add(@{vendor=$vendor;status='not_found';message='No eligible standalone model-matching listing returned. Price and stock unknown.'})
         } else {
             $winner=$found[0];$cost=[decimal]$winner.price
             $output.Add(@{vendor=$vendor;status='estimate';count=$found.Count;offer=$winner;

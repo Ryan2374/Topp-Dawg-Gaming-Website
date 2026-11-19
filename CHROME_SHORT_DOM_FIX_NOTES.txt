@@ -1,0 +1,26 @@
+TOPP DAWG GAMING — SHORT DOM VALIDATION FIX (NO PYTHON)
+
+WHY THIS UPDATE
+The existing Chrome DOM capture routine requires 80 or more characters of
+HTML before accepting it. The local HTML test is deliberately tiny. Your latest
+diagnostic reported 76 bytes, which might already be a correct DOM dump.
+The previous script rejects even valid short HTML without inspecting the
+actual content.
+
+WHAT CHANGES
+* Accept a complete HTML document regardless of its length.
+* Show the first 180 characters of Chrome output on failure, so the next
+  diagnostic identifies what actually came back.
+* Keep Chrome-only search, your markup rules, site data and saved prices.
+
+INSTALL
+1. Stop the website server (Ctrl+C).
+2. Extract this ZIP and run APPLY_UPDATE.bat.
+3. Select your ORIGINAL website folder and confirm Y.
+4. Restart start_local_test.bat, then run DIAGNOSE_SHOPPING.bat.
+5. The local test must show LOCAL CHROME DOM CAPTURE: PASS before you attempt
+   a retailer search.
+
+This update only fixes HTML validation. Chrome still may not return usable
+shopping listings; search-engine results do not guarantee stock or final costs.
+Live Windows Chrome behavior is not verified here.

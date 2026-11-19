@@ -1,0 +1,33 @@
+TOPP DAWG GAMING - CHROME DOM CAPTURE RECOVERY
+
+REASON FOR THIS UPDATE
+The last diagnostic failed on a local HTML file: Chrome returned empty stdout
+when launched with direct in-memory .NET output pipes. That proves the search
+page and retailer matching logic have NOT yet been tested by that diagnostic.
+The previous file-redirection approach reached the output read, but File.ReadAllText
+failed on Windows because an output file was still open by another process.
+
+WHAT CHANGED
+Use Chrome's documented headless --dump-dom output redirected to a local file,
+then read it using explicit FileShare.ReadWrite permissions and bounded retries.
+This avoids the two previously observed capture problems without DevTools
+WebSockets, Edge, Python, or retailer accounts. Google/Bing availability is
+still independent of the local Chrome capture test.
+
+INSTALL AND TEST
+1. Stop the Topp Dawg local server (Ctrl+C in its command window).
+2. Extract this ZIP to a separate folder and run APPLY_UPDATE.bat.
+3. Choose the ORIGINAL website folder containing site\index.html and
+   site-settings.json (or build.py), and confirm with Y.
+4. Restart start_local_test.bat in the original website folder.
+5. Run DIAGNOSE_SHOPPING.bat. It must say LOCAL CHROME DOM CAPTURE: PASS
+   BEFORE you attempt retail shopping search again.
+6. Open the local Price Lab and search for AMD Ryzen 5 9600X.
+
+If the LOCAL capture fails again, the new diagnostic includes Chrome exit code,
+stdout byte count, and stderr excerpt. Send that output; do not repeatedly
+reinstall old updates or assume a retailer blocked your request.
+
+This update does not guarantee that Google/Bing return prices or stock. Search
+listing prices remain unverified estimates. No fake prices are substituted.
+No website is published. Your existing prices and settings are retained.

@@ -1,0 +1,32 @@
+TOPP DAWG GAMING - CHROME DOM OUTPUT LOCK FIX
+
+WHAT WAS WRONG
+The previous PowerShell script used Start-Process -RedirectStandardOutput,
+then tried to reopen the resulting temporary HTML file. On Windows Chrome
+could keep that output file open, causing: "file is being used by another process".
+This error prevented ANY shopping-price extraction and was not proof that
+retailers had no listings.
+
+WHAT CHANGED
+Chrome still runs in headless mode, but its standard output and diagnostics
+are captured directly in memory using .NET streams. Chrome output is not
+written to temporary '*-out.html' files. Both output streams are drained
+at the same time, with timeouts to prevent a hung search. The Chrome-only,
+no-WebSocket design and the existing 5%-20% markup are unchanged.
+
+INSTALL
+1. Stop the local site server (Ctrl+C).
+2. Extract this whole update ZIP outside of your website folder.
+3. Run APPLY_UPDATE.bat and choose the ORIGINAL website project folder.
+4. Confirm with Y, then restart start_local_test.bat in the original folder.
+5. Run DIAGNOSE_SHOPPING.bat. The local capture test should report PASS.
+6. In the Price Lab, try searching for AMD Ryzen 5 9600X.
+
+REAL SEARCH LIMITATION
+This fixes the local file-lock bug, not shopping-engine restrictions.
+If the local DOM capture reports PASS but no priced offers appear, Google
+or Bing may be hiding prices from automated results or the search page
+structure may have changed. No fake prices will be filled in.
+
+No Python, Edge, retail accounts, or website publication needed. The updater
+backs up changed files and preserves site settings and saved prices.

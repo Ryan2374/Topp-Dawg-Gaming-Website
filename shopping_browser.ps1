@@ -36,29 +36,84 @@ function Get-ShoppingBrowser {
     }
     throw 'Google Chrome not found. Install Chrome or set TDG_CHROME_PATH; Edge is not used.'
 }
+function Read-TDGSharedFile([string]$path) {
+    # Start-Process can leave redirection handles open while Chrome descendants
+    # exit. Read with explicit share permissions; File.ReadAllText uses a share
+    # mode that can fail against the redirected writer on Windows.
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return '' }
+    $shareFlags = [IO.FileShare]([int][IO.FileShare]::ReadWrite -bor [int][IO.FileShare]::Delete)
+    $stream = $null
+    $reader = $null
+    try {
+        $stream = [IO.FileStream]::new($path,[IO.FileMode]::Open,[IO.FileAccess]::Read,$shareFlags)
+        $reader = [IO.StreamReader]::new($stream,[Text.Encoding]::UTF8,$true)
+        return $reader.ReadToEnd()
+    } finally {
+        if ($null -ne $reader) { $reader.Dispose() }
+        elseif ($null -ne $stream) { $stream.Dispose() }
+    }
+}
 function Invoke-ChromeDomDump([string]$chrome,[string]$target,[string]$work,[string]$label,[int]$waitMs) {
+    # The preceding version tried .NET ReadToEndAsync pipes. Chrome returned
+    # EMPTY stdout even for an isolated local file on the user's Windows PC.
+    # Earlier redirected FILE capture reached the read step but failed because
+    # File.ReadAllText could not open Chrome's still-shared output file.
+    # Restore file redirection and read with FileShare.ReadWrite/Delete instead.
     $profile = Join-Path $work ('profile-' + $label)
     [void][IO.Directory]::CreateDirectory($profile)
     $stdout = Join-Path $work ($label + '-out.html')
     $stderr = Join-Path $work ($label + '-err.txt')
-    $chromeArgs = '--headless=new --disable-gpu --no-first-run --no-default-browser-check --disable-extensions ' +
-            '--user-data-dir="' + $profile + '" --dump-dom --timeout=' + $waitMs + ' "' + $target + '"'
+    $chromeArgs = '--headless --disable-gpu --no-first-run --no-default-browser-check --disable-extensions ' +
+        '--user-data-dir="' + $profile + '" --dump-dom --timeout=' + $waitMs + ' "' + $target + '"'
     $process = $null
+    $exitStatus = 'not available'
+    $timedOut = $false
     try {
         $process = Start-Process -FilePath $chrome -ArgumentList $chromeArgs -WindowStyle Hidden `
             -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -ErrorAction Stop
-        # A hung Google/Bing page must never stall the entire local website forever.
-        $grace = [Math]::Max(15000, $waitMs + 10000)
-        if (-not $process.WaitForExit($grace)) {
-            throw ('Chrome timed out capturing ' + $label + ' (no prices recorded).')
+        $grace = [Math]::Max(20000,$waitMs + 14000)
+        $timedOut = -not $process.WaitForExit($grace)
+        if ($timedOut) {
+            try { $process.Kill() } catch { }
+        } else {
+            try { $exitStatus = [string]$process.ExitCode } catch { }
         }
-        if (-not (Test-Path -LiteralPath $stdout -PathType Leaf)) {
-            throw ('Chrome produced no captured DOM for ' + $label + '.')
+        # An exiting Chrome renderer may retain the writer handle. Allow a
+        # short stabilization window, but never hang the local server.
+        $page = ''
+        $lastReadError = ''
+        $lastSize = 0
+        for ($attempt=0; $attempt -lt 10; $attempt++) {
+            try {
+                if (Test-Path -LiteralPath $stdout -PathType Leaf) {
+                    $lastSize = (Get-Item -LiteralPath $stdout).Length
+                    if ($lastSize -gt 12000000) { throw 'Chrome returned an excessively large page.' }
+                    $page = Read-TDGSharedFile $stdout
+                    if ($page -match '(?i)<html(?:\s|>)' -and $page -match '(?i)</html\s*>') { break }
+                }
+            } catch {
+                $lastReadError = $_.Exception.GetBaseException().Message
+            }
+            Start-Sleep -Milliseconds 250
         }
-        $file = Get-Item -LiteralPath $stdout
-        if ($file.Length -lt 80) { throw ('Chrome returned an empty or very small page for ' + $label + '.') }
-        if ($file.Length -gt 12000000) { throw ('Chrome returned an excessively large page for ' + $label + '.') }
-        return [IO.File]::ReadAllText($stdout,[Text.Encoding]::UTF8)
+        if ($page -match '(?i)<html(?:\s|>)' -and $page -match '(?i)</html\s*>') { return $page }
+        $errorText = ''
+        try { $errorText = Read-TDGSharedFile $stderr } catch { }
+        if (-not [string]::IsNullOrWhiteSpace($errorText)) {
+            $errorText = ($errorText -replace '[\r\n]+',' ').Trim()
+            if ($errorText.Length -gt 320) { $errorText = $errorText.Substring(0,320) }
+        }
+        $reason = 'Chrome did not produce readable DOM'
+        if ($timedOut) { $reason = 'Chrome timed out before producing readable DOM' }
+        $message = ('{0} for {1}. Exit={2}; stdout-bytes={3}' -f $reason,$label,$exitStatus,$lastSize)
+        if ($lastReadError) { $message += '; read-error=' + $lastReadError }
+        if ($errorText) { $message += '; Chrome-stderr=' + $errorText }
+        if (-not [string]::IsNullOrWhiteSpace($page)) {
+            $preview = ($page -replace '[\x00-\x1F]+',' ').Trim()
+            if ($preview.Length -gt 180) { $preview = $preview.Substring(0,180) }
+            $message += '; stdout-preview=' + $preview
+        }
+        throw $message
     } finally {
         if ($null -ne $process) {
             try { if (-not $process.HasExited) { $process.Kill() } } catch { }
@@ -146,3 +201,7 @@ function Invoke-ShoppingBrowser([string]$query) {
         try { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction Stop } catch { }
     }
 }
+
+# A structured shopping-data source replaces the unreliable headless HTML
+# scraping for actual price searches. Its key is stored locally via DPAPI.
+. (Join-Path $root 'shopping_provider.ps1')

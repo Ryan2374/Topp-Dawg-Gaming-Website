@@ -1,0 +1,30 @@
+TOPP DAWG GAMING - STRUCTURED SHOPPING PRICE SEARCH
+
+The previous Chrome capture is now functioning, but Google Shopping blocked
+headless access and Bing returned zero useful cards. This update switches the
+automatic price search to SerpApi's structured Google Shopping results.
+
+No supplier or reseller accounts are required. SerpApi has a free tier, but
+REQUIRES a free search-service account and API key (currently 250 searches/month).
+Visit https://serpapi.com/ to create a search-data account. Your key is NEVER
+placed in site HTML or JavaScript, and is encrypted with Windows DPAPI.
+
+1) Apply this update to your original website via APPLY_UPDATE.bat.
+2) Run SETUP_SHOPPING_API.bat from the updated original website folder.
+3) Paste your SerpApi key (the prompt hides it).
+4) Restart start_local_test.bat. In lab.html select a part and click
+   Search Shopping Prices Automatically.
+5) Run DIAGNOSE_SHOPPING.bat for network/quota feedback if needed.
+
+The markup on every retrieved matching part remains 20% for low-price parts,
+sliding to 5% at $1,000. Listings are estimates only. Availability and final
+checkout price cannot be confirmed by Google Shopping results.
+
+Important: product identifiers in the early sample catalog are NOT exact
+manufacturer part numbers for many parts, and some conceptual products cannot
+be reliably priced. Keep unverified listings out of purchase-ready inventory.
+The optional URL/manual capture UI may still exist; this provider does not
+require those fields for automatic search.
+
+The local server remains loopback-only. No public website or payment features
+are enabled by this update. This is a testing integration, not live ordering.

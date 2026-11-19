@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "searchUrl":  "https://www.google.com/search?tbm=shop\u0026hl=en\u0026gl=us\u0026q=AMD%20Ryzen%205%209600X",
+        "key":  "desktop.cpu.r5",
+        "price":  350.35,
+        "engine":  "Google Shopping via SerpApi",
+        "availability":  "unknown",
+        "classification":  "search_listing_unverified",
+        "checked_at":  "2026-11-19T20:30:44Z",
+        "title":  "Amd Ryzen 5 9600x 6-core Processor",
+        "vendor":  "Best Buy",
+        "productUrl":  null
+    }
+]
